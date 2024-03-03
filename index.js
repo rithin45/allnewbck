@@ -20,6 +20,8 @@ const Product=require("./model/Addproduct")
 // const Signupp=require("./routes/Signupp")
 // const Db=require("./connection/Db")
 const User=require("./model/Usrsignup") 
+const data2model=require("./model/Adminlogin")
+const CartItem=require("./model/Cart")
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json());
@@ -188,29 +190,32 @@ app.post('/new',upload.single('image1'),async (request,response) => {
 //     }
 //   });
 
-app.post('/addtocart', upload.single('image1'), async (req, res) => {
-    try {
-      const { name, offer_price, MRP, category,quantity } = req.body;
+// app.post('/addtocart', upload.single('image1'), async (req, res) => {
+//     try {
+//       const { name, offer_price, MRP, category,quantity } = req.body;
     
       
-      const product = new Product({
-        name,
-        offer_price,
-        MRP,
-        category,
-        quantity,
-        image1: {
-            data:request.file.buffer,
-            contentType: request.file.mimetype,}
-      });
+//       const product = new Product({
+//         name,
+//         offer_price,
+//         MRP,
+//         category,
+//         quantity,
+//         image1: {
+//             data:request.file.buffer,
+//             contentType: request.file.mimetype,}
+//       });
   
-      await product.save();
-      res.status(201).json({ message: 'Product added successfully' });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
+//       await product.save();
+//       res.status(201).json({ message: 'Product added successfully' });
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//   });
+
+
+  
 
  
   
@@ -282,3 +287,90 @@ app.post('/addtocart', upload.single('image1'), async (req, res) => {
       res.status(500).json({ message: 'Internal server error.' });
     }
   })
+
+
+  app.post('/Loginsearch',async(request,response)=>{
+    const {username,password}=request.body;
+    try{ const user=await data2model.findOne({username,password});
+    if(user)
+    {response.json({success: true,message:'Login Successfully'});}
+    else
+    {response.json({success: false,message:'Invalid Username and email'});}
+    }
+    catch(error)
+    {
+    response.status(500).json({sucess: false,message:'Error'})
+    }
+    })
+
+
+
+
+
+    // app.post('/addtocart', async (req, res) => {
+    //   const { productId, quantity } = req.body;
+    
+    //   try {
+    //     const product = await Product.findById(productId);
+    //     if (!product) {
+    //       return res.status(404).json({ message: 'Product not found' });
+    //     }
+    
+    //     // Add the product to the cart logic here
+    //     // For simplicity, let's assume you have a cart schema and model
+    //     // and you add the product to the cart collection
+    
+    //     // For example:
+    //     const cartItem = new Cart({ productId, quantity });
+    //     await cartItem.save();
+    
+    //     res.status(201).json({ message: 'Product added to cart' });
+    //   } catch (error) {
+    //     res.status(500).json({ message: error.message });
+    //   }
+    // });
+
+    // app.delete('/cart/:productId', async (req, res) => {
+    //   const productId = req.params.productId;
+    
+    //   try {
+    //     // Remove the product from the cart logic here
+    //     // For simplicity, let's assume you have a cart schema and model
+    //     // and you remove the product from the cart collection
+    
+    //     // For example:
+    //     await Cart.findOneAndDelete({ productId });
+    
+    //     res.json({ message: 'Product removed from cart' });
+    //   } catch (error) {
+    //     res.status(500).json({ message: error.message });
+    //   }
+    // });
+
+
+
+    app.post('/addtocart/:productId', async (req, res) => {
+      try {
+        const productId = req.params.productId;
+        
+        // Check if the product is already in the cart
+        let cartItem = await CartItem.findOne({ productId });
+        
+        // if (cartItem) {
+        //   // If the product is already in the cart, increase its quantity
+        //   cartItem.quantity += 1;
+        // } else
+         {
+          // If the product is not in the cart, create a new cart item
+          cartItem = new CartItem({ productId });
+        }
+        
+        // Save the cart item
+        await cartItem.save();
+        
+        res.status(200).json({ message: `Product added to cart: ${productId}` });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });

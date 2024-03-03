@@ -3,7 +3,7 @@ mongoose.connect('mongodb+srv://rithinroy27:rithinroy27@cluster0.kod0pin.mongodb
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  .then(()=>{console.log("DB connected")})
+  .then(()=>{console.log("DB connected Usersign")})
 .catch(err=>console.log(err));
   // Define a user schema
   const userSchema = new mongoose.Schema({
