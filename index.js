@@ -179,14 +179,24 @@ app.post('/new',upload.single('image1'),async (request,response) => {
 
 
     // Get cart items
-app.get('/cart', async (req, res) => {
-  try {
-    const cartItems = await CartItem.find();
-    res.json(cartItems);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+    app.get('/cart', async (req, res) => {
+      try {
+        const result = await CartItem.aggregate([
+          {
+            $lookup: {
+              from: "cats",
+              localField: "productId",
+              foreignField: "_id",
+              as: "subc",
+            },
+          }
+        ]);
+        
+        res.send(result);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+    });
 
 // Add to cart
 app.post('/cart', async (req, res) => {
@@ -204,10 +214,11 @@ app.post('/cart', async (req, res) => {
 
 // Remove from cart
 app.delete('/cart/:id', async (req, res) => {
+  console.log(req.body)
   try {
     await CartItem.findByIdAndRemove(req.params.id);
     res.json({ message: 'CartItem removed' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
+}); 
