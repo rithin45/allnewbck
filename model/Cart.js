@@ -8,12 +8,8 @@ const cartItemSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'cats',
     required: true
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    default: 1
   }
+  
 });
 
 var CartItem = mongoose.model('CartItem', cartItemSchema);

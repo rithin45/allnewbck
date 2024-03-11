@@ -1,19 +1,12 @@
-const mongoose=require("mongoose") 
-mongoose.connect('mongodb+srv://rithinroy27:rithinroy27@cluster0.lczmmd9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(()=>{console.log("DB connected Usersign")})
-.catch(err=>console.log(err));
-  // Define a user schema
-  const userSchema = new mongoose.Schema({
-    name: String,
-    email: { type: String, unique: true },
+const mongoose = require('mongoose');
+
+const FormDataSchema = new mongoose.Schema({
+    name : String,
+    email: String,
     password: String
-  });
-  
-  // Define a user model
-//   const User = mongoose.model('User', userSchema);
-  var User=mongoose.model("user",userSchema)
-module.exports=User;
+})
+
+const FormDataModel = mongoose.model('log_reg_form', FormDataSchema);
+
+module.exports = FormDataModel;
   
