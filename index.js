@@ -173,44 +173,29 @@ app.post('/cart', async (req, res) => {
 
 
 
-app.post('/address',(request,response)=>{
-  console.log(request.body)
-  new shippingmodel(request.body).save();
-  response.send("Record Successfully Saved")
-
-})
-
-// app.get('/address',async(request,response)=>{
-//   var data=await shippingmodel.find();
-//   response.send(data)
-// });
+app.post('/address', async (req, res) => {
+  try {
+    const { fullName, addressLine1, addressLine2, city, postalCode, country } = req.body;
+    const shippingAddress = { fullName, addressLine1, addressLine2, city, postalCode, country };
+    // Save shipping address to the database
+    res.json({ success: true, message: 'Shipping address saved successfully.', shippingAddress });
+  } catch (error) {
+    console.error('Error saving shipping address:', error);
+    res.status(500).json({ success: false, message: 'Failed to save shipping address.' });
+  }
+});
 app.get('/address', (req, res) => {
-  res.json(shippingAddress);
+  // Return the shipping address data
+  res.json(shippingAddressData);
 });
 
-app.get('/order-history', async (req, res) => {
-  try {
-    const result = await ordermodel.aggregate([
-      {
-        $lookup: {
-          from: "CartItems",
-          localField: "productId",
-          foreignField: "_id",
-          as: "crtc",
-        },
-        // $lookup: {
-        //   from: "ship",
-        //   localField: "productId",
-        //   foreignField: "_id",
-        //   as: "shipc",
-        // },
-      }
-    ]);
-    
-    res.send(result);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+
+
+
+
+app.get('/address',async(request,response)=>{
+  var data=await shippingmodel.find();
+  response.send(data)
 });
 
 

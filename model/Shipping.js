@@ -7,11 +7,11 @@ let sh=mongoose.Schema;
 const shipschema=new sh(
     {
         fullName: String,
-        addressLine1: String,
-        addressLine2: String,
-        city: String,
-        postalCode: String,
-        country: String,
+      addressLine1: String,
+      addressLine2: String,
+      city: String,
+      postalCode: String,
+      country: String
     }
 );
 var shippingmodel=mongoose.model("ship",shipschema)
