@@ -172,6 +172,22 @@ app.post('/cart', async (req, res) => {
 });
 
 
+app.delete('/cart/:id', async (req, res) => {
+  try {
+    const deletedItem = await CartItem.findByIdAndDelete(req.params.id);
+    if (!deletedItem) {
+      return res.status(404).json({ message: 'Cart item not found' });
+    }
+    res.status(200).json({ message: 'Cart item deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
+
 
 app.post('/address', async (req, res) => {
   try {

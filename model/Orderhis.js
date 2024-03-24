@@ -7,9 +7,6 @@ const orderSchema = new or({
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'cats' },
   }],
   totalAmount: { type: Number, required: true },
-  shippingAddress: { type: mongoose.Schema.Types.ObjectId, ref: 'ships' },
-  codInfo: { type: String },
-  createdAt: { type: Date, default: Date.now },
   });
   var ordermodel=mongoose.model("order",orderSchema)
 module.exports=ordermodel;
