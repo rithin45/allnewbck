@@ -200,10 +200,10 @@ app.post('/address', async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to save shipping address.' });
   }
 });
-app.get('/address', (req, res) => {
-  // Return the shipping address data
-  res.json(shippingAddressData);
-});
+// app.get('/address', (req, res) => {
+//   // Return the shipping address data
+//   res.json(shippingAddressData);
+// });
 
 
 
@@ -338,8 +338,8 @@ app.put('/edit/:id', upload.single('image1'), async (request, response) => {
 
 app.post('/order', async (req, res) => {
   try {
-    const { cartItems, totalAmount, shippingAddressId, codInfo } = req.body;
-    const newOrder = new ordermodel({ cartItems, totalAmount, shippingAddress: shippingAddressId, codInfo });
+    const { cartItems, totalAmount, shippingAddressId, codInfo, createdAt } = req.body;
+    const newOrder = new ordermodel({ cartItems, totalAmount, shippingAddress: shippingAddressId, codInfo, createdAt });
     await newOrder.save();
     res.json({ success: true, message: 'Order placed successfully.', order: newOrder });
   } catch (error) {

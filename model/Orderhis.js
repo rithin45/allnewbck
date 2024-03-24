@@ -7,6 +7,8 @@ const orderSchema = new or({
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'cats' },
   }],
   totalAmount: { type: Number, required: true },
+  codInfo:String,
+  createdAt:String,
   });
   var ordermodel=mongoose.model("order",orderSchema)
 module.exports=ordermodel;
